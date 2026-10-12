@@ -38,6 +38,10 @@ TEMPLATE_WORLD = os.path.join(BDS, "worlds", "mcp-world")
 BRIDGE_PACK = "fa013817-66f2-4a5f-a724-1347f912bd40"
 PACKS = [("behavior_packs", os.path.join(REPO, "development_behavior_packs", "skyblock_infinite")),
          ("resource_packs", os.path.join(REPO, "development_resource_packs", "skyblock_infinite"))]
+# The client's own development folders. Junctioning the packs in here too is what makes them show up in the
+# client's world settings, so a world can be made in the client without going through the server at all.
+CLIENT = os.path.join(os.environ.get("APPDATA", ""), "Minecraft Bedrock", "Users", "Shared", "games", "com.mojang")
+CLIENT_PACKS = [("development_behavior_packs", PACKS[0][1]), ("development_resource_packs", PACKS[1][1])]
 # A flat world with no layers at all: air from bedrock to build limit, forever. biome_id 1 is plains, which
 # is what lets grass grow and passive mobs spawn on an island.
 VOID_LAYERS = '{"biome_id":1,"block_layers":[],"encoding_version":6,"structure_options":null,"world_version":"version.post_1_18"}\n'
@@ -89,6 +93,22 @@ def write_pack_list(path, packs):
         json.dump([{"pack_id": uuid, "version": version} for uuid, version in packs], file, indent=1)
 
 
+def link_into_client():
+    """Junction the packs into the Minecraft client's own development folders, so they appear in its world
+    settings. Without this the add-on only exists on the server, which is why it was missing from the
+    client's behavior pack list the first time anyone looked."""
+    if not os.path.isdir(CLIENT):
+        print(f"  no Minecraft client at {CLIENT}; skipping the client junctions")
+        return
+    for folder, source in CLIENT_PACKS:
+        try:
+            junction(os.path.join(CLIENT, folder, "skyblock_infinite"), source)
+        except RuntimeError as error:
+            print(f"  could not link into the client: {error}")
+            return
+    print(f"  linked into the client at {CLIENT}")
+
+
 def build(reset=False):
     if reset and os.path.exists(WORLD):
         for folder, _ in PACKS:                      # unlink before deleting, never through a junction
@@ -121,6 +141,7 @@ def build(reset=False):
         print(f"WARNING: no bridge pack at {bridge_source}; the MCP server will not reach this world")
     write_pack_list(os.path.join(WORLD, "world_behavior_packs.json"), behaviors)
     write_pack_list(os.path.join(WORLD, "world_resource_packs.json"), resources)
+    link_into_client()
     print(f"world ready at {WORLD}")
     print(f"  behavior packs: {[uuid for uuid, _ in behaviors]}")
     print(f"  resource packs: {[uuid for uuid, _ in resources]}")

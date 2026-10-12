@@ -80,6 +80,26 @@ with its twelve frames empty, and tells you where it is. Nothing else the data p
 overworld biome maps to its crimson forest, warped forest, soul sand valley or snowy slopes islands. They
 are finished islands with a starter chest like the rest, so seed mode here can pick them too.
 
+## Achievements
+
+Achievements cannot be earned on this map, and that cannot be fixed. Bedrock permanently disables them for a
+world under several conditions, and this map meets three of them independently. Each was checked in the game
+itself, on the Create New World screen, which shows an "Achievements disabled" line the moment a condition
+is met:
+
+| Condition | Why this map meets it |
+| --- | --- |
+| The world was created as a flat world | The infinite void **is** a flat world with no block layers. There is no other way to get an empty overworld on Bedrock. |
+| External behavior packs are activated | The islands, recipes, loot and generation are the behavior pack. |
+| Cheats are enabled | So that `/scriptevent sbi:menu` can reopen the config menu. |
+
+The first two cannot be removed without removing the map, so turning cheats off would buy nothing, and the
+menu command is kept.
+
+This is not the same as the rule that changed for Marketplace content. Marketplace add-ons keep achievements;
+a third-party pack like this one does not, and the flat world would disable them regardless. See the
+[wiki's list of conditions](https://minecraft.wiki/w/Achievement).
+
 ## Running it here
 
 The add-on is developed against the Bedrock Dedicated Server in `C:\GitHub\bedrock-server`, driven through
