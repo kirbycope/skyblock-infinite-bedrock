@@ -1,0 +1,621 @@
+/**
+ * Every island the behavior pack ships, written by tools/convert_islands.py.
+ * Do not edit by hand; the offsets come from the Java datapack's own placement functions.
+ */
+export const FALLBACK = "plaines";
+export const STARTING = ["badlands", "beach", "birch", "cherry_grove", "crimpson_forest", "dark_forest", "deep_frozen_ocean", "desert", "flower_forest", "ice_spikes", "jungle", "lush_caves", "mangrove", "mountains", "mushroom_fields", "plaines", "savanna", "snowy_slopes", "soul_sand_valley", "stony_shore", "sunflower_forest", "swamp", "taiga", "taiga_snow", "warped_forest", "windswept_gravel_hills"];
+export const OUTER = ["birch", "cherry_grove", "deep_frozen_ocean", "desert", "dripstone_cave", "flower_forest", "ice_spikes", "jagged_peaks", "jungle", "lush_cave", "mangrove", "mushroom_island", "roofed_forest", "savanna", "sunflower_forest", "taiga"];
+export const NETHER = ["basalt_delta", "crimson_forest", "portal", "soulsand_valley", "warped_forest"];
+export const ISLANDS = {
+ "nether_islands/basalt_delta": {
+  "offset": [
+   4,
+   62,
+   197
+  ],
+  "size": [
+   4,
+   6,
+   4
+  ],
+  "structure": "skyblock:nether_islands_basalt_delta"
+ },
+ "nether_islands/crimson_forest": {
+  "offset": [
+   5,
+   55,
+   -187
+  ],
+  "size": [
+   5,
+   16,
+   5
+  ],
+  "structure": "skyblock:nether_islands_crimson_forest"
+ },
+ "nether_islands/portal": {
+  "offset": [
+   6,
+   62,
+   6
+  ],
+  "size": [
+   4,
+   5,
+   3
+  ],
+  "structure": "skyblock:nether_islands_portal"
+ },
+ "nether_islands/soulsand_valley": {
+  "offset": [
+   -186,
+   62,
+   6
+  ],
+  "size": [
+   4,
+   7,
+   4
+  ],
+  "structure": "skyblock:nether_islands_soulsand_valley"
+ },
+ "nether_islands/warped_forest": {
+  "offset": [
+   198,
+   62,
+   6
+  ],
+  "size": [
+   5,
+   13,
+   5
+  ],
+  "structure": "skyblock:nether_islands_warped_forest"
+ },
+ "outer_islands/birch": {
+  "offset": [
+   -188,
+   61,
+   197
+  ],
+  "size": [
+   5,
+   12,
+   5
+  ],
+  "structure": "skyblock:outer_islands_birch"
+ },
+ "outer_islands/cherry_grove": {
+  "offset": [
+   -383,
+   62,
+   4
+  ],
+  "size": [
+   13,
+   14,
+   7
+  ],
+  "structure": "skyblock:outer_islands_cherry_grove"
+ },
+ "outer_islands/deep_frozen_ocean": {
+  "offset": [
+   6,
+   60,
+   389
+  ],
+  "size": [
+   4,
+   5,
+   4
+  ],
+  "structure": "skyblock:outer_islands_deep_frozen_ocean"
+ },
+ "outer_islands/desert": {
+  "offset": [
+   198,
+   61,
+   198
+  ],
+  "size": [
+   4,
+   6,
+   4
+  ],
+  "structure": "skyblock:outer_islands_desert"
+ },
+ "outer_islands/dripstone_cave": {
+  "offset": [
+   390,
+   62,
+   392
+  ],
+  "size": [
+   4,
+   6,
+   4
+  ],
+  "structure": "skyblock:outer_islands_dripstone_cave"
+ },
+ "outer_islands/flower_forest": {
+  "offset": [
+   6,
+   62,
+   -379
+  ],
+  "size": [
+   4,
+   6,
+   4
+  ],
+  "structure": "skyblock:outer_islands_flower_forest"
+ },
+ "outer_islands/ice_spikes": {
+  "offset": [
+   -381,
+   62,
+   -381
+  ],
+  "size": [
+   7,
+   35,
+   7
+  ],
+  "structure": "skyblock:outer_islands_ice_spikes"
+ },
+ "outer_islands/jagged_peaks": {
+  "offset": [
+   389,
+   61,
+   6
+  ],
+  "size": [
+   4,
+   8,
+   4
+  ],
+  "structure": "skyblock:outer_islands_jagged_peaks"
+ },
+ "outer_islands/jungle": {
+  "offset": [
+   1,
+   61,
+   -191
+  ],
+  "size": [
+   12,
+   18,
+   12
+  ],
+  "structure": "skyblock:outer_islands_jungle"
+ },
+ "outer_islands/lush_cave": {
+  "offset": [
+   -379,
+   57,
+   389
+  ],
+  "size": [
+   4,
+   7,
+   4
+  ],
+  "structure": "skyblock:outer_islands_lush_cave"
+ },
+ "outer_islands/mangrove": {
+  "offset": [
+   -188,
+   61,
+   1
+  ],
+  "size": [
+   11,
+   18,
+   10
+  ],
+  "structure": "skyblock:outer_islands_mangrove"
+ },
+ "outer_islands/mushroom_island": {
+  "offset": [
+   197,
+   61,
+   5
+  ],
+  "size": [
+   4,
+   4,
+   4
+  ],
+  "structure": "skyblock:outer_islands_mushroom_island"
+ },
+ "outer_islands/roofed_forest": {
+  "offset": [
+   -189,
+   61,
+   -190
+  ],
+  "size": [
+   8,
+   12,
+   8
+  ],
+  "structure": "skyblock:outer_islands_roofed_forest"
+ },
+ "outer_islands/savanna": {
+  "offset": [
+   195,
+   61,
+   -192
+  ],
+  "size": [
+   7,
+   12,
+   9
+  ],
+  "structure": "skyblock:outer_islands_savanna"
+ },
+ "outer_islands/sunflower_forest": {
+  "offset": [
+   389,
+   62,
+   -379
+  ],
+  "size": [
+   4,
+   6,
+   4
+  ],
+  "structure": "skyblock:outer_islands_sunflower_forest"
+ },
+ "outer_islands/taiga": {
+  "offset": [
+   4,
+   61,
+   196
+  ],
+  "size": [
+   5,
+   10,
+   5
+  ],
+  "structure": "skyblock:outer_islands_taiga"
+ },
+ "starting_islands/badlands": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   10,
+   8
+  ],
+  "structure": "skyblock:starting_islands_badlands"
+ },
+ "starting_islands/beach": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   10,
+   8
+  ],
+  "structure": "skyblock:starting_islands_beach"
+ },
+ "starting_islands/birch": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   9,
+   8
+  ],
+  "structure": "skyblock:starting_islands_birch"
+ },
+ "starting_islands/cherry_grove": {
+  "offset": [
+   0,
+   61,
+   5
+  ],
+  "size": [
+   12,
+   14,
+   9
+  ],
+  "structure": "skyblock:starting_islands_cherry_grove"
+ },
+ "starting_islands/crimpson_forest": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   10,
+   8
+  ],
+  "structure": "skyblock:starting_islands_crimpson_forest"
+ },
+ "starting_islands/dark_forest": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   11,
+   9
+  ],
+  "structure": "skyblock:starting_islands_dark_forest"
+ },
+ "starting_islands/deep_frozen_ocean": {
+  "offset": [
+   4,
+   61,
+   5
+  ],
+  "size": [
+   7,
+   13,
+   7
+  ],
+  "structure": "skyblock:starting_islands_deep_frozen_ocean"
+ },
+ "starting_islands/desert": {
+  "offset": [
+   5,
+   61,
+   5
+  ],
+  "size": [
+   6,
+   7,
+   6
+  ],
+  "structure": "skyblock:starting_islands_desert"
+ },
+ "starting_islands/flower_forest": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   10,
+   8
+  ],
+  "structure": "skyblock:starting_islands_flower_forest"
+ },
+ "starting_islands/ice_spikes": {
+  "offset": [
+   5,
+   61,
+   5
+  ],
+  "size": [
+   6,
+   10,
+   6
+  ],
+  "structure": "skyblock:starting_islands_ice_spikes"
+ },
+ "starting_islands/jungle": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   12,
+   8
+  ],
+  "structure": "skyblock:starting_islands_jungle"
+ },
+ "starting_islands/lush_caves": {
+  "offset": [
+   4,
+   59,
+   5
+  ],
+  "size": [
+   7,
+   11,
+   8
+  ],
+  "structure": "skyblock:starting_islands_lush_caves"
+ },
+ "starting_islands/mangrove": {
+  "offset": [
+   2,
+   61,
+   5
+  ],
+  "size": [
+   12,
+   15,
+   12
+  ],
+  "structure": "skyblock:starting_islands_mangrove"
+ },
+ "starting_islands/mountains": {
+  "offset": [
+   5,
+   61,
+   5
+  ],
+  "size": [
+   6,
+   4,
+   6
+  ],
+  "structure": "skyblock:starting_islands_mountains"
+ },
+ "starting_islands/mushroom_fields": {
+  "offset": [
+   2,
+   61,
+   5
+  ],
+  "size": [
+   9,
+   9,
+   9
+  ],
+  "structure": "skyblock:starting_islands_mushroom_fields"
+ },
+ "starting_islands/plaines": {
+  "offset": [
+   0,
+   57,
+   2
+  ],
+  "size": [
+   14,
+   18,
+   14
+  ],
+  "structure": "skyblock:starting_islands_plaines"
+ },
+ "starting_islands/savanna": {
+  "offset": [
+   2,
+   61,
+   5
+  ],
+  "size": [
+   9,
+   11,
+   9
+  ],
+  "structure": "skyblock:starting_islands_savanna"
+ },
+ "starting_islands/snowy_slopes": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   6,
+   4,
+   6
+  ],
+  "structure": "skyblock:starting_islands_snowy_slopes"
+ },
+ "starting_islands/soul_sand_valley": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   15,
+   8
+  ],
+  "structure": "skyblock:starting_islands_soul_sand_valley"
+ },
+ "starting_islands/stony_shore": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   10,
+   8
+  ],
+  "structure": "skyblock:starting_islands_stony_shore"
+ },
+ "starting_islands/sunflower_forest": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   10,
+   8
+  ],
+  "structure": "skyblock:starting_islands_sunflower_forest"
+ },
+ "starting_islands/swamp": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   10,
+   8
+  ],
+  "structure": "skyblock:starting_islands_swamp"
+ },
+ "starting_islands/taiga": {
+  "offset": [
+   3,
+   61,
+   4
+  ],
+  "size": [
+   8,
+   12,
+   9
+  ],
+  "structure": "skyblock:starting_islands_taiga"
+ },
+ "starting_islands/taiga_snow": {
+  "offset": [
+   3,
+   61,
+   4
+  ],
+  "size": [
+   8,
+   12,
+   9
+  ],
+  "structure": "skyblock:starting_islands_taiga_snow"
+ },
+ "starting_islands/warped_forest": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   8,
+   12,
+   8
+  ],
+  "structure": "skyblock:starting_islands_warped_forest"
+ },
+ "starting_islands/windswept_gravel_hills": {
+  "offset": [
+   3,
+   61,
+   5
+  ],
+  "size": [
+   9,
+   14,
+   9
+  ],
+  "structure": "skyblock:starting_islands_windswept_gravel_hills"
+ }
+};

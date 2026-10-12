@@ -1,0 +1,37 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shapeless": {
+    "description": {
+      "identifier": "skyblock_infinite:blackstone"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "ingredients": [
+      {
+        "item": "minecraft:cobbled_deepslate"
+      },
+      {
+        "item": "minecraft:cobbled_deepslate"
+      },
+      {
+        "item": "minecraft:basalt"
+      },
+      {
+        "item": "minecraft:basalt"
+      }
+    ],
+    "result": {
+      "item": "minecraft:blackstone",
+      "count": 1
+    },
+    "unlock": [
+      {
+        "item": "minecraft:basalt"
+      },
+      {
+        "item": "minecraft:cobbled_deepslate"
+      }
+    ]
+  }
+}

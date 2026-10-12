@@ -1,0 +1,20 @@
+# the original Java data pack: never checked in, fetched by hand from Modrinth
+/java
+
+# the release build, written by tools/build_addon.py
+/build/
+
+# Minecraft's own folders, if a client or server ever writes into the repository
+behavior_packs/
+resource_packs/
+world_templates/
+minecraftpe/
+
+# watchdog runs
+/watchdog/
+
+__pycache__/
+.pytest_cache/
+
+# screenshots from tools/client_drive.py
+/captures/

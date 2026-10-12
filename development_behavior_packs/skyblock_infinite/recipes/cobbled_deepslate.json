@@ -1,0 +1,37 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shapeless": {
+    "description": {
+      "identifier": "skyblock_infinite:cobbled_deepslate"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "ingredients": [
+      {
+        "item": "minecraft:basalt"
+      },
+      {
+        "item": "minecraft:basalt"
+      },
+      {
+        "item": "minecraft:cobblestone"
+      },
+      {
+        "item": "minecraft:cobblestone"
+      }
+    ],
+    "result": {
+      "item": "minecraft:cobbled_deepslate",
+      "count": 4
+    },
+    "unlock": [
+      {
+        "item": "minecraft:basalt"
+      },
+      {
+        "item": "minecraft:cobblestone"
+      }
+    ]
+  }
+}
