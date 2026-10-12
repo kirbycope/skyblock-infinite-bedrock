@@ -351,9 +351,9 @@ async function showConfig(player) {
         .body(`Layout seed: §7${layoutSeed()}§r\nPick what this world should be, then press Start.`);
     for (const setting of model) {
         const value = getProp(setting.prop, setting.fallback);
-        form.button(`${setting.title}\n§7${setting.describe(value)}`, setting.icon(value));
+        form.button(`${setting.title}\n${setting.describe(value)}`, setting.icon(value));
     }
-    form.button("§aStart", ICON_START);
+    form.button("Start", ICON_START);
     const response = await show(form, player);
     if (response.canceled) return;
     if (response.selection === model.length) return applyAndStart(player);
@@ -366,8 +366,8 @@ async function showConfig(player) {
 /** One setting's choices, as buttons with their pictures. */
 async function showChoice(player, setting) {
     const form = new ActionFormData().title(setting.title).body("Choose one.");
-    for (const choice of setting.choices) form.button(`${choice.label}\n§7${choice.hint}`, choice.icon);
-    form.button("§7Back");
+    for (const choice of setting.choices) form.button(`${choice.label}\n${choice.hint}`, choice.icon);
+    form.button("Back");
     const response = await show(form, player);
     if (response.canceled || response.selection >= setting.choices.length) return;
     world.setDynamicProperty(setting.prop, setting.choices[response.selection].value);
@@ -376,8 +376,8 @@ async function showChoice(player, setting) {
 /** The starting island, where "Choose one" opens the picker. */
 async function showMainChoice(player, setting) {
     const form = new ActionFormData().title(setting.title).body("Choose one.");
-    for (const choice of setting.choices) form.button(`${choice.label}\n§7${choice.hint}`, choice.icon);
-    form.button("§7Back");
+    for (const choice of setting.choices) form.button(`${choice.label}\n${choice.hint}`, choice.icon);
+    form.button("Back");
     const response = await show(form, player);
     if (response.canceled || response.selection >= setting.choices.length) return;
     const choice = setting.choices[response.selection];
@@ -391,7 +391,7 @@ async function showIslandPicker(player, setting) {
     const form = new ActionFormData().title("Starting island")
         .body("Every island the data pack ships. The chest on each one is the same.");
     for (const name of STARTING) form.button(pretty(name), ICON(`starting_islands_${name}`));
-    form.button("§7Back");
+    form.button("Back");
     const response = await show(form, player);
     if (response.canceled) return;
     if (response.selection >= STARTING.length) return showMainChoice(player, setting);
@@ -424,7 +424,7 @@ async function showMenu(player) {
         .button("Place the outer islands again", ICON("outer_islands_jungle"))
         .button("Place the nether islands", ICON("nether_islands_crimson_forest"))
         .button("Build an end portal room here", ICON_PORTAL)
-        .button("§7Close");
+        .button("Close");
     const response = await show(form, player);
     if (response.canceled || response.selection === 3) return;
     if (response.selection === 0) {
