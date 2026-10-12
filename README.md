@@ -1,3 +1,5 @@
+![skyblock-infinite-bedrock](/skyblock-infinite-bedrock.png)
+
 # skyblock-infinite-bedrock
 
 A Minecraft Bedrock port of [Skyblock Infinite](https://modrinth.com/datapack/skyblock-infinite) 1.1.18,

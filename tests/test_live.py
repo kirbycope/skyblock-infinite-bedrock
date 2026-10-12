@@ -1,6 +1,6 @@
 """Tests that only a running server can answer.
 
-    python -m unittest tests.test_live -v
+    python -m unittest discover -s tests -v -k test_live
 
 Needs the Bedrock Dedicated Server up on this add-on's world and the MCP bridge with it, as the README's
 "Running it here" section describes. Every test skips rather than fails when the bridge is not answering, so
