@@ -34,6 +34,18 @@ The data pack's Modrinth page credits these builders for individual islands. The
 `development_behavior_packs/skyblock_infinite/pack_icon.png` and the resource pack's copy are the data
 pack's own `skyblock-infinite_pack.png`, by Dr.Trog, Apache-2.0.
 
+## Thumbnail
+
+The title on `assets/thumbnail.png` is set in **Passion One** (Black), by **Dario Manuel Muhafara**,
+under the SIL Open Font License 1.1.
+
+- Project: <https://fonts.google.com/specimen/Passion+One>
+- Licence: OFL-1.1
+- In this tree: [tools/fonts/PassionOne-Black.ttf](tools/fonts/PassionOne-Black.ttf)
+
+Everything else in the thumbnail is this project's own: `assets/background.png` is a screenshot of the
+world the add-on generates, and `assets/skin.png` is the author's player skin.
+
 ## Code reused from this author's other repositories
 
 - The NBT reader and writer in [tools/nbt_to_mcstructure.py](tools/nbt_to_mcstructure.py) come from
