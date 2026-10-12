@@ -143,6 +143,7 @@ not after `/reload`.
 | `tools/write_pack_files.py` | Writes the recipes and loot tables from the data pack's JSON |
 | `tools/capture_previews.py` | Photographs every island in game and writes the menu's button textures |
 | `tools/controller_check.py` | Drives the menu with a virtual gamepad and captures each press |
+| `tools/make_pack_icons.py` | Writes both packs' icons and the world template's icon |
 | `tools/bridge.py` | Runs commands through the MCP bridge, no client needed |
 | `tools/client_drive.py` | Drives the real client on this PC and captures what it shows |
 | `tools/make_thumbnail.py` | Builds `assets/thumbnail.png` and the 960x540 repository preview |

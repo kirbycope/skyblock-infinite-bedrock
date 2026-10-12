@@ -31,8 +31,16 @@ The data pack's Modrinth page credits these builders for individual islands. The
 
 ## Pack icon
 
-`development_behavior_packs/skyblock_infinite/pack_icon.png` and the resource pack's copy are the data
-pack's own `skyblock-infinite_pack.png`, by Dr.Trog, Apache-2.0.
+`development_behavior_packs/skyblock_infinite/pack_icon.png` and the resource pack's copy are this
+project's own, written by [tools/make_pack_icons.py](tools/make_pack_icons.py): the plains island cut out
+of one of the screenshots `tools/capture_previews.py` took, set on a gradient in the thumbnail's blues. The
+island itself is Dr.Trog's build, Apache-2.0, like the rest of them.
+
+They used to be the data pack's own 32 pixel `skyblock-infinite_pack.png`, which was too small to read in
+Minecraft's pack list.
+
+`world_template/world_icon.jpeg` is `assets/thumbnail.png` resized, so see the next section for what is in
+it.
 
 ## Thumbnail
 
