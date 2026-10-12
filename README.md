@@ -1,4 +1,4 @@
-![skyblock-infinite-bedrock](/skyblock-infinite-bedrock.png)
+![skyblock-infinite-bedrock](https://github.com/kirbycope/skyblock-infinite-bedrock/raw/main/skyblock-infinite-bedrock.png)
 
 # skyblock-infinite-bedrock
 
