@@ -4,12 +4,14 @@
 		"name": "Skyblock Infinite",
 		"description": "Skyblock for any seed with infinite void generation",
 		"uuid": "08a16ea9-83f3-429a-b6e1-d9e9fe986753",
-		"version": [1, 1, 18],
+		"version": [1, 2, 0],
 		"base_game_version": [1, 21, 50],
 		"lock_template_options": false
 	},
 	"metadata": {
-		"authors": ["kirbycope"],
+		"authors": [
+			"kirbycope"
+		],
 		"license": "Apache-2.0",
 		"url": "https://github.com/kirbycope/skyblock-infinite-bedrock"
 	},
@@ -18,7 +20,7 @@
 			"description": "Skyblock Infinite world template",
 			"type": "world_template",
 			"uuid": "47f5cc78-9264-4e6e-a3ae-74d1be1d628a",
-			"version": [1, 1, 18]
+			"version": [1, 2, 0]
 		}
 	]
 }

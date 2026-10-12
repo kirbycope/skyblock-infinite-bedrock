@@ -158,6 +158,55 @@ class Structures(unittest.TestCase):
         self.assertEqual(chests, 26, "all 26 starting islands carry a chest")
 
 
+class MenuPreviews(unittest.TestCase):
+    """The config menu's buttons are texture buttons, and a texture the resource pack does not have shows as
+    a blank button rather than an error, so the pictures are checked rather than trusted."""
+
+    FOLDER = os.path.join(RP, "textures", "ui", "islands")
+    # the three pictures that are not an island; see SPECIALS in tools/capture_previews.py
+    SPECIALS = ("void", "portal_room", "spawn")
+
+    def test_every_island_has_a_preview(self):
+        for key in islands_js()["ISLANDS"]:
+            name = key.replace("/", "_") + ".png"
+            self.assertTrue(os.path.exists(os.path.join(self.FOLDER, name)),
+                            f"{key} has no preview at textures/ui/islands/{name}")
+
+    def test_the_pictures_that_are_not_islands_are_there(self):
+        for name in self.SPECIALS:
+            self.assertTrue(os.path.exists(os.path.join(self.FOLDER, name + ".png")), name)
+
+    def test_every_texture_the_menu_names_exists(self):
+        """Every literal textures/ui/islands/... path in main.js, including the ones built from a template
+        literal, which are expanded over the island lists."""
+        source = open(os.path.join(BP, "scripts", "main.js"), encoding="utf-8").read()
+        table = islands_js()
+        names = {n for n in re.findall(r'ICON\("([a-z_]+)"\)', source)}
+        for match in re.findall(r'ICON\(`([a-z_]+)_\$\{([A-Za-z]+)\}`\)', source):
+            prefix, variable = match
+            values = {"seedIsland": table["STARTING"], "name": table["STARTING"],
+                      "FALLBACK": [table["FALLBACK"]]}.get(variable)
+            self.assertIsNotNone(values, f"main.js builds a texture name from {variable}, which this test "
+                                         f"does not know how to expand")
+            names |= {f"{prefix}_{value}" for value in values}
+        self.assertGreater(len(names), 25, "the menu should name a lot of previews")
+        for name in sorted(names):
+            self.assertTrue(os.path.exists(os.path.join(self.FOLDER, name + ".png")),
+                            f"main.js shows textures/ui/islands/{name}, which the pack does not have")
+
+    def test_the_previews_are_square_and_small(self):
+        try:
+            from PIL import Image
+        except ImportError:
+            self.skipTest("Pillow is not installed; the release workflow installs it")
+        for name in sorted(os.listdir(self.FOLDER)):
+            if not name.endswith(".png"):
+                continue
+            with Image.open(os.path.join(self.FOLDER, name)) as image:
+                self.assertEqual(image.width, image.height, f"{name} is not square")
+                self.assertLessEqual(image.width, 256, f"{name} is bigger than a button needs")
+
+
 class PackData(unittest.TestCase):
     def test_recipes_are_well_formed(self):
         folder = os.path.join(BP, "recipes")
@@ -243,3 +292,36 @@ class WritingStyle(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Thumbnail(unittest.TestCase):
+    """The project art and everything tools/make_thumbnail.py needs to rebuild it."""
+
+    ASSETS = os.path.join(ROOT, "assets")
+
+    def test_sources_are_committed(self):
+        for name in ("background.png", "skin.png"):
+            self.assertTrue(os.path.isfile(os.path.join(self.ASSETS, name)),
+                            f"assets/{name} is missing, so the thumbnail cannot be rebuilt")
+        self.assertTrue(os.path.isfile(os.path.join(ROOT, "tools", "fonts",
+                                                    "PassionOne-Black.ttf")),
+                        "the title font is missing")
+
+    def test_skin_is_a_64x64_classic_model(self):
+        from PIL import Image
+        with Image.open(os.path.join(self.ASSETS, "skin.png")) as skin:
+            self.assertEqual(skin.size, (64, 64))
+            # tools/skin_render.py unwraps the 4px-arm layout, not the slim one
+            arm = skin.convert("RGBA").crop((47, 20, 48, 32))
+            self.assertTrue(max(p[3] for p in arm.getdata()) > 0,
+                            "skin_render.py expects the classic 4px arm")
+
+    def test_master_is_1920x1080(self):
+        from PIL import Image
+        with Image.open(os.path.join(self.ASSETS, "thumbnail.png")) as img:
+            self.assertEqual(img.size, (1920, 1080))
+
+    def test_preview_matches_the_portfolio_size(self):
+        from PIL import Image
+        with Image.open(os.path.join(ROOT, "skyblock-infinite-bedrock.png")) as img:
+            self.assertEqual(img.size, (960, 540))

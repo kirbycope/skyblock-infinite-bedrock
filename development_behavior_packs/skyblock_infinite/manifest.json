@@ -4,11 +4,13 @@
 		"name": "Skyblock Infinite",
 		"description": "Skyblock Infinite Behavior Pack",
 		"uuid": "f038fde4-5c97-4345-97fe-bcb10dee4c82",
-		"version": [1, 1, 18],
+		"version": [1, 2, 0],
 		"min_engine_version": [1, 21, 50]
 	},
 	"metadata": {
-		"authors": ["kirbycope"],
+		"authors": [
+			"kirbycope"
+		],
 		"license": "Apache-2.0",
 		"url": "https://github.com/kirbycope/skyblock-infinite-bedrock"
 	},
@@ -17,7 +19,7 @@
 			"description": "Islands, recipes and loot",
 			"type": "data",
 			"uuid": "e1cca555-77aa-4817-b071-3f6e083c3140",
-			"version": [1, 1, 18]
+			"version": [1, 2, 0]
 		},
 		{
 			"description": "Island generation and the config menu",
@@ -25,13 +27,13 @@
 			"language": "javascript",
 			"entry": "scripts/main.js",
 			"uuid": "55ac386d-66ba-4321-8cf7-83c18685abfe",
-			"version": [1, 1, 18]
+			"version": [1, 2, 0]
 		}
 	],
 	"dependencies": [
 		{
 			"uuid": "b862c807-8587-44d6-8cc5-500410878b1f",
-			"version": [1, 1, 18]
+			"version": [1, 2, 0]
 		},
 		{
 			"module_name": "@minecraft/server",

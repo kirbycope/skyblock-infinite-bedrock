@@ -11,7 +11,7 @@
  * ticking area for a moment first, the way the datapack forceloads a chunk before `place template`.
  */
 import { ItemStack, system, world } from "@minecraft/server";
-import { ActionFormData, ModalFormData } from "@minecraft/server-ui";
+import { ActionFormData } from "@minecraft/server-ui";
 import { FALLBACK, ISLANDS, NETHER, OUTER, STARTING } from "./islands.js";
 
 /** Where the datapack puts the player once the starting island is down. */
@@ -250,38 +250,164 @@ function buildEndPortal(spot) {
 // ---------------------------------------------------------------------------
 // The config menu
 // ---------------------------------------------------------------------------
+//
+// The Java datapack builds this menu in the world: four block_display blocks floating over the island that
+// you punch to cycle a setting, and a fifth to start. Bedrock has no block displays or interaction entities,
+// and punching a block in mid air is the one kind of menu a controller is worst at.
+//
+// So every setting is a list of buttons instead of a dropdown. A button list is what a gamepad can drive
+// with nothing but the stick and A; a dropdown needs a pointer to open it and scroll it, which is why the
+// first version of this menu was awkward on a controller. Each button carries a picture of what it gives
+// you - the island previews under textures/ui/islands/, which are real screenshots of the real islands,
+// taken by tools/capture_previews.py.
 
-const MAIN_CHOICES = [["seed", "Seed - an island picked by this world's layout seed"],
-                      ["classic", "Classic - the original plains island"]];
-const OUTER_CHOICES = [["seed", "Seed - the islands this world's seed picks"],
-                       ["classic", "Classic - all sixteen, in the classic rings"],
-                       ["off", "Off - no outer islands"]];
-const NETHER_CHOICES = [["off", "Off - Bedrock generates a normal Nether"],
-                        ["on", "On - place the five nether islands as well"]];
-const PORTAL_CHOICES = [["far", "Far - a stronghold portal room at 1000 60 1000"],
-                        ["near", "Near - one at 64 60 64"],
-                        ["off", "Off - no end portal"]];
+/** A preview texture. Every one of these is a file in the resource pack; nothing here is a vanilla path. */
+const ICON = (name) => `textures/ui/islands/${name}`;
+const ICON_OFF = ICON("void");          // a picture of the empty void, which is what Off leaves you with
+const ICON_PORTAL = ICON("portal_room");
+const ICON_START = ICON("spawn");
 
+// The data pack's own file names, a couple of which are misspelled. The menu shows them as they are meant
+// to read; on disk they stay exactly as they are, because the structure names have to keep matching.
+const LABELS = { crimpson_forest: "Crimson Forest", plaines: "Plains", taiga_snow: "Snowy Taiga",
+                 windswept_gravel_hills: "Windswept Gravelly Hills" };
+const pretty = (name) => LABELS[name] ?? name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+/**
+ * The settings, in the order the menu lists them. `choices` are the buttons inside a setting; `icon` may be
+ * a function so a choice can show what this particular world would give (seed mode shows the island this
+ * world's seed actually picked).
+ */
+function settings() {
+    const seedIsland = pickStarting("seed", layoutSeed());
+    return [
+        {
+            prop: PROP.main, title: "Starting island", fallback: "seed",
+            describe: (value) => (STARTING.includes(value) ? pretty(value) : value === "classic" ? "Classic" : "Seed"),
+            icon: (value) => ICON(`starting_islands_${STARTING.includes(value) ? value : value === "classic" ? FALLBACK : seedIsland}`),
+            choices: [
+                { value: "seed", label: "Seed", hint: `This world's seed gives the ${pretty(seedIsland)} island`,
+                  icon: ICON(`starting_islands_${seedIsland}`) },
+                { value: "classic", label: "Classic", hint: "The original plains island",
+                  icon: ICON(`starting_islands_${FALLBACK}`) },
+                { value: "pick", label: "Choose one", hint: `Pick from all ${STARTING.length} islands`,
+                  icon: ICON("starting_islands_cherry_grove") },
+            ],
+        },
+        {
+            prop: PROP.outer, title: "Outer islands", fallback: "seed",
+            describe: (value) => ({ seed: "Seed", classic: "Classic", off: "Off" }[value] ?? value),
+            icon: (value) => ({ seed: ICON("outer_islands_jungle"), classic: ICON("outer_islands_cherry_grove"),
+                                off: ICON_OFF }[value] ?? ICON_OFF),
+            choices: [
+                { value: "seed", label: "Seed", hint: "The islands this world's seed picks",
+                  icon: ICON("outer_islands_jungle") },
+                { value: "classic", label: "Classic", hint: "All sixteen, in the classic rings",
+                  icon: ICON("outer_islands_cherry_grove") },
+                { value: "off", label: "Off", hint: "No outer islands", icon: ICON_OFF },
+            ],
+        },
+        {
+            prop: PROP.nether, title: "Nether islands", fallback: "off",
+            describe: (value) => (value === "on" ? "On" : "Off"),
+            icon: (value) => (value === "on" ? ICON("nether_islands_crimson_forest") : ICON_OFF),
+            choices: [
+                { value: "off", label: "Off", hint: "Bedrock generates a normal Nether already", icon: ICON_OFF },
+                { value: "on", label: "On", hint: "Place the five nether islands as well",
+                  icon: ICON("nether_islands_crimson_forest") },
+            ],
+        },
+        {
+            prop: PROP.portal, title: "End portal", fallback: "far",
+            describe: (value) => ({ far: "Far", near: "Near", off: "Off" }[value] ?? value),
+            icon: (value) => (value === "off" ? ICON_OFF : ICON_PORTAL),
+            choices: [
+                { value: "far", label: "Far", hint: "A stronghold portal room at 1000 60 1000", icon: ICON_PORTAL },
+                { value: "near", label: "Near", hint: "One at 64 60 64", icon: ICON_PORTAL },
+                { value: "off", label: "Off", hint: "No end portal", icon: ICON_OFF },
+            ],
+        },
+    ];
+}
+
+/**
+ * Show a form, retrying while the player is still busy closing the last one. Chaining forms is the whole
+ * shape of this menu, and a form shown in the same tick another closed is simply refused.
+ */
+async function show(form, player) {
+    for (let attempt = 0; attempt < 20; attempt++) {
+        const response = await form.show(player);
+        if (response.cancelationReason !== "UserBusy") return response;
+        await system.waitTicks(10);
+    }
+    return { canceled: true };
+}
+
+/** The hub: one button per setting showing what it is set to, then Start. */
 async function showConfig(player) {
-    const form = new ModalFormData().title("Skyblock Infinite");
-    form.dropdown("Starting island", MAIN_CHOICES.map((c) => c[1]), { defaultValueIndex: 0 });
-    form.dropdown("Outer islands", OUTER_CHOICES.map((c) => c[1]), { defaultValueIndex: 0 });
-    form.dropdown("Nether islands", NETHER_CHOICES.map((c) => c[1]), { defaultValueIndex: 0 });
-    form.dropdown("End portal", PORTAL_CHOICES.map((c) => c[1]), { defaultValueIndex: 0 });
-    form.submitButton("Start");
-    const response = await form.show(player);
+    const model = settings();
+    const form = new ActionFormData()
+        .title("Skyblock Infinite")
+        .body(`Layout seed: §7${layoutSeed()}§r\nPick what this world should be, then press Start.`);
+    for (const setting of model) {
+        const value = getProp(setting.prop, setting.fallback);
+        form.button(`${setting.title}\n§7${setting.describe(value)}`, setting.icon(value));
+    }
+    form.button("§aStart", ICON_START);
+    const response = await show(form, player);
     if (response.canceled) return;
-    const [main, outer, nether_, portal] = response.formValues;
-    const wanted = MAIN_CHOICES[main][0];
-    world.setDynamicProperty(PROP.main, wanted);
-    world.setDynamicProperty(PROP.outer, OUTER_CHOICES[outer][0]);
-    world.setDynamicProperty(PROP.nether, NETHER_CHOICES[nether_][0]);
-    world.setDynamicProperty(PROP.portal, PORTAL_CHOICES[portal][0]);
-    // Classic swaps the island already placed for the plains one, the way the datapack's
-    // replace_island_with_plaines does.
-    if (wanted === "classic") {
-        run(overworld(), "fill 0 58 -4 15 76 18 air");
-        const swap = job(`starting_islands/${FALLBACK}`, "overworld", "the classic island");
+    if (response.selection === model.length) return applyAndStart(player);
+    const setting = model[response.selection];
+    if (setting.prop === PROP.main) await showMainChoice(player, setting);
+    else await showChoice(player, setting);
+    return showConfig(player);
+}
+
+/** One setting's choices, as buttons with their pictures. */
+async function showChoice(player, setting) {
+    const form = new ActionFormData().title(setting.title).body("Choose one.");
+    for (const choice of setting.choices) form.button(`${choice.label}\n§7${choice.hint}`, choice.icon);
+    form.button("§7Back");
+    const response = await show(form, player);
+    if (response.canceled || response.selection >= setting.choices.length) return;
+    world.setDynamicProperty(setting.prop, setting.choices[response.selection].value);
+}
+
+/** The starting island, where "Choose one" opens the picker. */
+async function showMainChoice(player, setting) {
+    const form = new ActionFormData().title(setting.title).body("Choose one.");
+    for (const choice of setting.choices) form.button(`${choice.label}\n§7${choice.hint}`, choice.icon);
+    form.button("§7Back");
+    const response = await show(form, player);
+    if (response.canceled || response.selection >= setting.choices.length) return;
+    const choice = setting.choices[response.selection];
+    if (choice.value === "pick") return showIslandPicker(player, setting);
+    world.setDynamicProperty(setting.prop, choice.value);
+}
+
+/** Every starting island, each with its own picture. The datapack has no such screen: it only ever picks
+ * for you. The previews make choosing worth offering, and it is the one place a 26 item list earns itself. */
+async function showIslandPicker(player, setting) {
+    const form = new ActionFormData().title("Starting island")
+        .body("Every island the data pack ships. The chest on each one is the same.");
+    for (const name of STARTING) form.button(pretty(name), ICON(`starting_islands_${name}`));
+    form.button("§7Back");
+    const response = await show(form, player);
+    if (response.canceled) return;
+    if (response.selection >= STARTING.length) return showMainChoice(player, setting);
+    world.setDynamicProperty(setting.prop, STARTING[response.selection]);
+}
+
+/** Start: store nothing new, swap the island if the choice differs from what is already down, and generate. */
+function applyAndStart(player) {
+    const wanted = getProp(PROP.main, "seed");
+    const placed = pickStarting(wanted, layoutSeed());
+    // The island already placed was picked by the seed. If the player chose differently, the old one is
+    // cleared and the new one goes down, the way the datapack's replace_island_with_plaines does.
+    if (placed !== pickStarting("seed", layoutSeed())) {
+        // every starting island fits inside 0 57 2 to 13 75 16, with a block of margin either way
+        run(overworld(), "fill -1 56 1 14 76 17 air");
+        const swap = job(`starting_islands/${placed}`, "overworld", `the ${placed} island`);
         swap.after = () => {
             for (const p of world.getAllPlayers()) p.teleport(SPAWN, { dimension: overworld() });
         };
@@ -294,12 +420,12 @@ async function showConfig(player) {
 async function showMenu(player) {
     if (!world.getDynamicProperty(PROP.configured)) return showConfig(player);
     const form = new ActionFormData().title("Skyblock Infinite")
-        .body(`Layout seed: ${layoutSeed()}\nStarting island: ${getProp(PROP.main, "seed")}\nOuter islands: ${getProp(PROP.outer, "seed")}`)
-        .button("Place the outer islands again")
-        .button("Place the nether islands")
-        .button("Build an end portal room here")
-        .button("Close");
-    const response = await form.show(player);
+        .body(`Layout seed: §7${layoutSeed()}§r\nStarting island: §7${getProp(PROP.main, "seed")}§r\nOuter islands: §7${getProp(PROP.outer, "seed")}§r`)
+        .button("Place the outer islands again", ICON("outer_islands_jungle"))
+        .button("Place the nether islands", ICON("nether_islands_crimson_forest"))
+        .button("Build an end portal room here", ICON_PORTAL)
+        .button("§7Close");
+    const response = await show(form, player);
     if (response.canceled || response.selection === 3) return;
     if (response.selection === 0) {
         for (const name of OUTER) enqueue(`outer_islands/${name}`, "overworld", `the ${name} outer island`);
@@ -356,6 +482,12 @@ world.afterEvents.entityDie.subscribe((event) => {
 system.afterEvents.scriptEventReceive.subscribe((event) => {
     const player = event.sourceEntity;
     if (event.id === "sbi:menu" && player) showMenu(player);
+    // Reopen the setup menu on a world that is already set up, so the choices can be made again. The
+    // islands already placed are left where they are; Start puts down whatever the new choices ask for.
+    if (event.id === "sbi:reconfigure" && player) {
+        world.setDynamicProperty(PROP.configured, false);
+        showConfig(player);
+    }
     if (event.id === "sbi:seed" && !world.getDynamicProperty(PROP.generated)) {
         world.setDynamicProperty(PROP.seed, event.message.trim());
         world.sendMessage(`§eLayout seed set to §f${event.message.trim()}§e.`);

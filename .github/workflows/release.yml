@@ -30,6 +30,9 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Install Pillow
+        run: python3 -m pip install --quiet pillow
+
       - name: Static tests
         run: python3 -m unittest discover -s tests -v
 

@@ -34,19 +34,33 @@ The first time you join, a menu asks how to lay the world out. It can be reopene
 
 ### The menu
 
+Every setting is a list of buttons, and every button carries a picture of what it will give you. The
+pictures are screenshots of the real islands, taken in game by `tools/capture_previews.py` and committed as
+resource pack textures, so the Cherry Grove button shows the actual Cherry Grove island.
+
 | Setting | Choices |
 | --- | --- |
-| Starting island | **Seed**, an island picked by this world's layout seed, or **Classic**, the original plains island |
+| Starting island | **Seed**, the island this world's layout seed picks, **Classic**, the original plains island, or **Choose one**, a picker with all 26 islands and their previews |
 | Outer islands | **Seed**, the islands this world's seed picks, **Classic**, all sixteen, or **Off** |
 | Nether islands | **Off** (the default) or **On** |
 | End portal | A portal room **far** out at 1000 60 1000, **near** at 64 60 64, or **off** |
 
+Buttons rather than dropdowns is a controller decision. A dropdown needs a pointer to open and scroll; a
+button list is driven with the stick and A, so the menu works on a gamepad without touching a mouse. The
+data pack's own menu - four blocks floating over the island that you punch to cycle a setting - could not be
+ported for the same reason, quite apart from Bedrock having no block displays.
+
 Two more commands, both only useful before the world is generated or for looking around:
 
 ```
+/scriptevent sbi:menu              open the menu
+/scriptevent sbi:reconfigure       reopen the setup menu on a world that is already set up
 /scriptevent sbi:seed 12345        set the layout seed, so a layout can be reproduced
 /scriptevent sbi:island desert     place a named starting island at spawn
 ```
+
+The menu is driven with a controller as well as a mouse: the stick or D-pad moves the highlight, A opens a
+setting, B goes back. That is the reason it is built from button lists.
 
 ## What is different on Bedrock
 
@@ -127,8 +141,20 @@ not after `/reload`.
 | `tools/build_addon.py` | Builds `build/skyblock-infinite-bedrock.mctemplate` |
 | `tools/make_template_level.py` | Rewrites `world_template/level.dat` |
 | `tools/write_pack_files.py` | Writes the recipes and loot tables from the data pack's JSON |
+| `tools/capture_previews.py` | Photographs every island in game and writes the menu's button textures |
+| `tools/controller_check.py` | Drives the menu with a virtual gamepad and captures each press |
 | `tools/bridge.py` | Runs commands through the MCP bridge, no client needed |
 | `tools/client_drive.py` | Drives the real client on this PC and captures what it shows |
+| `tools/make_thumbnail.py` | Builds `assets/thumbnail.png` and the 960x540 repository preview |
+| `tools/skin_render.py` | Renders the posed player from `assets/skin.png` for the thumbnail |
+
+### The thumbnail
+
+`python tools/make_thumbnail.py` rebuilds the picture at the top of this file. It needs nothing but
+what is committed: the void screenshot in `assets/background.png`, the player skin in
+`assets/skin.png` and Passion One in `tools/fonts/`. It writes the 1920x1080 master to
+`assets/thumbnail.png` and hands that to `tools/make_preview.py`, which writes the 960x540
+`skyblock-infinite-bedrock.png` the portfolio site uses.
 
 ### The original data pack
 

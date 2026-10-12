@@ -4,11 +4,13 @@
 		"name": "Skyblock Infinite",
 		"description": "Skyblock Infinite Resource Pack",
 		"uuid": "b862c807-8587-44d6-8cc5-500410878b1f",
-		"version": [1, 1, 18],
+		"version": [1, 2, 0],
 		"min_engine_version": [1, 21, 50]
 	},
 	"metadata": {
-		"authors": ["kirbycope"],
+		"authors": [
+			"kirbycope"
+		],
 		"license": "Apache-2.0",
 		"url": "https://github.com/kirbycope/skyblock-infinite-bedrock"
 	},
@@ -17,7 +19,7 @@
 			"description": "Resources",
 			"type": "resources",
 			"uuid": "f626d6dd-62ee-4f8a-bf65-771640b71ec0",
-			"version": [1, 1, 18]
+			"version": [1, 2, 0]
 		}
 	]
 }
