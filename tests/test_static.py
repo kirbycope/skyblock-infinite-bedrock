@@ -334,7 +334,7 @@ class Thumbnail(unittest.TestCase):
     ASSETS = os.path.join(ROOT, "assets")
 
     def test_sources_are_committed(self):
-        for name in ("background.png", "skin.png"):
+        for name in ("background.png", "background_void.png", "skin.png"):
             self.assertTrue(os.path.isfile(os.path.join(self.ASSETS, name)),
                             f"assets/{name} is missing, so the thumbnail cannot be rebuilt")
         self.assertTrue(os.path.isfile(os.path.join(ROOT, "tools", "fonts",
