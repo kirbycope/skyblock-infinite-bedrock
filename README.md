@@ -1,4 +1,4 @@
-![skyblock-infinite-bedrock](https://github.com/kirbycope/skyblock-infinite-bedrock/raw/main/skyblock-infinite-bedrock.png)
+![skyblock-infinite-bedrock](https://github.com/kirbycope/skyblock-infinite-bedrock/releases/latest/download/skyblock-infinite-bedrock.png)
 
 # skyblock-infinite-bedrock
 
@@ -174,6 +174,9 @@ python -m unittest discover -s tests -v
 the script can ask for is in the pack, every block in every structure is a name a server has accepted, all
 26 starting chests are stocked, and the template world is void. `tests/test_live.py` needs the server and
 the bridge, and skips itself when they are not there.
+
+## Requirements
+Minecraft Bedrock 1.26.0 or newer, with no experiments.
 
 ## Releasing
 
