@@ -36,6 +36,9 @@ jobs:
       - name: Static tests
         run: python3 -m unittest discover -s tests -v
 
+      - name: Check pack versions
+        run: python3 tools/check_pack_versions.py
+
       - name: Build skyblock-infinite-bedrock.mctemplate
         run: python3 tools/build_addon.py
 
